@@ -19,7 +19,9 @@ public class CategoryService
     public List<Category> getAllCategories()
     {
         // get all categories
-        return null;
+        return categoryRepository.findAll()
+                .stream()
+                .toList();
     }
 
     public Category getById(int categoryId)
