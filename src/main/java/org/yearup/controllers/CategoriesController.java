@@ -69,12 +69,10 @@ public class CategoriesController
     {
         // insert the category and return it with status 201 Created
         try {
-
             Category createdCategory = categoryService.create(category);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdCategory);
 
         } catch (RuntimeException ex) {
-
             return ResponseEntity.badRequest().build();
         }
     }
@@ -87,17 +85,13 @@ public class CategoriesController
     {
         // update the category by id and return the updated category (200 OK)
         try {
-
             Category updatedCategory = categoryService.update(id, category);
             return ResponseEntity.ok(updatedCategory);
 
         } catch (Exception e) {
-
             if (e.getMessage().equals("Category id " + id + " not found.")) {
-
                 return ResponseEntity.notFound().build();
             }
-
             return ResponseEntity.badRequest().build();
         }
     }
@@ -110,6 +104,15 @@ public class CategoriesController
     public ResponseEntity<Void> deleteCategory(@PathVariable int id)
     {
         // delete the category by id and return status 204 No Content
-        return null;
+        try {
+            categoryService.delete(id);
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            if (e.getMessage().equals("Category id " + id + " not found.")) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
