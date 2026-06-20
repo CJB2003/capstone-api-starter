@@ -1,6 +1,7 @@
 package org.yearup.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.yearup.models.Category;
@@ -41,8 +42,10 @@ public class CategoriesController
     @GetMapping("/{id}")
     public ResponseEntity<Category> getById(@PathVariable int id)
     {
-        // get the category by id
-        return ResponseEntity.ok(categoryService.getById(id));
+        // get the category by id, is an optional
+        return categoryService.getById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     // the url to return all products in category 1 would look like this
@@ -57,10 +60,17 @@ public class CategoriesController
 
     // add annotation to call this method for a POST action
     // add annotation to ensure that only an ADMIN can call this function
+    @PostMapping
     public ResponseEntity<Category> addCategory(@RequestBody Category category)
     {
         // insert the category and return it with status 201 Created
-        return null;
+        try {
+            Category createdCategory = categoryService.create(category);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdCategory);
+
+        } catch (RuntimeException ex) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     // add annotation to call this method for a PUT (update) action - the url path must include the categoryId
