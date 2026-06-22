@@ -23,8 +23,10 @@ public class ProductServiceTest {
     @InjectMocks
     private ProductService productService;
 
+    // No filter search should return all products whether they are featured or not
     @Test
     public void search_withNoFilters_shouldReturnAllProducts() {
+
         Product featuredProduct = new Product(1, "Featured Product", 25.00, 2, "Newly featured product", "low-fat", 100, true, "image.url");
         Product nonFeaturedProduct = new Product(1, "Non-Featured Product", 5.00, 1, "Newly featured product", "organic", 100, false, "image.url");
 
@@ -33,5 +35,19 @@ public class ProductServiceTest {
         List<Product> productList = productService.search(null,null,null,null,null);
 
         assertEquals(2, productList.size());
+    }
+
+    // Search with feature filter should only return featured products
+    @Test
+    public void search_withIsFeaturedFilter_shouldReturnAllFeaturedProducts() {
+
+        Product featuredProduct = new Product(1, "Featured Product", 25.00, 2, "Newly featured product", "low-fat", 100, true, "image.url");
+        Product nonFeaturedProduct = new Product(1, "Non-Featured Product", 5.00, 1, "Newly featured product", "organic", 100, false, "image.url");
+
+        when(productRepository.findAll()).thenReturn(Arrays.asList(featuredProduct, nonFeaturedProduct));
+
+        List<Product> productList = productService.search(null,null,null,null,true);
+
+        assertEquals(1, productList.size());
     }
 }
