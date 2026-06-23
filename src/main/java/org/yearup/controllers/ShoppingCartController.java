@@ -15,8 +15,7 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/cart")
 @CrossOrigin
-public class ShoppingCartController
-{
+public class ShoppingCartController {
     // a shopping cart controller depends on the service layer
     private ShoppingCartService shoppingCartService;
     private UserService userService;
@@ -45,6 +44,8 @@ public class ShoppingCartController
     @PostMapping("/products/{productId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ShoppingCart> addProductToCart (Principal principal, @PathVariable int productId) {
+
+        int userId = getUserId(principal);
 
         return null;
     }

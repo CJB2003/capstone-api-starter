@@ -27,10 +27,37 @@ public class ShoppingCartService
     {
         // load the user's cart rows, look up each product, and build the ShoppingCart
         List<CartItem> userCartItems = shoppingCartRepository.findByUserId(userId);
-        HashMap<Integer, ShoppingCartItem> shoppingCartItems = new HashMap<>();
+        ShoppingCart shoppingCart = new ShoppingCart();
 
-        return null;
+        userCartItems.stream()
+                .map(cartItem -> {
+                    Product product = productService.getById(cartItem.getProductId());
+                    ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
+                    shoppingCartItem.setProduct(product);
+                    shoppingCartItem.setQuantity(cartItem.getQuantity());
+                    return shoppingCartItem;
+                })
+                .forEach(shoppingCart::add);
+
+        return shoppingCart;
     }
 
     // add additional methods here
+    public ShoppingCart addProduct(int userId, int productId) {
+
+        CartItem cartItem = shoppingCartRepository.findByUserIdAndProductId(userId, productId);
+        // Checks if item is null, creates new cart item if null,
+        // otherwise the quantity of existing item increments by 1
+        if (cartItem == null) {
+            CartItem newCartItem = new CartItem();
+            newCartItem.setUserId(userId);
+            newCartItem.setProductId(productId);
+            newCartItem.setQuantity(1);
+            shoppingCartRepository.save(newCartItem);
+        } else {
+            cartItem.setQuantity(cartItem.getQuantity() + 1);
+            shoppingCartRepository.save(cartItem);
+        }
+        return getByUserId(userId);
+    }
 }
