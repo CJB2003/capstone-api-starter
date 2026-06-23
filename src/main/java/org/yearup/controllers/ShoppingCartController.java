@@ -1,5 +1,6 @@
 package org.yearup.controllers;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +48,7 @@ public class ShoppingCartController {
 
         int userId = getUserId(principal);
 
-        return null;
+        return ResponseEntity.status(HttpStatus.CREATED).body(shoppingCartService.addProduct(userId, productId));
     }
 
     // add a PUT method to update an existing product in the cart - the url should be
