@@ -3,7 +3,6 @@ package org.yearup.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.yearup.models.CartItem;
 import org.yearup.models.ShoppingCart;
@@ -63,12 +62,19 @@ public class ShoppingCartController {
         int userId = getUserId(principal);
 
         // Also returns quantity from cartItem
-        return ResponseEntity.ok(shoppingCartService.updateProduct(userId, productId, cartItem.getQuantity()));
+        return ResponseEntity.ok(shoppingCartService.updateProductInCart(userId, productId, cartItem.getQuantity()));
     }
-
 
     // add a DELETE method to clear all products from the current users cart
     // https://localhost:8080/cart  - return the (now empty) cart so the front end can refresh it (200 OK)
+    @DeleteMapping
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ShoppingCart> deleteCart(Principal principal) {
+        int userId = getUserId(principal);
+
+        // Returning 200 ok instead of 204 since specified
+        return ResponseEntity.ok(shoppingCartService.deleteProductsFromCart(userId));
+    }
 
     // Helper method for redundant code
     private int getUserId(Principal principal)

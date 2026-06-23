@@ -62,7 +62,7 @@ public class ShoppingCartService
     }
 
     // Only one field from cartItem can be updated which is quantity, so pass in as parameter
-    public ShoppingCart updateProduct(int userId, int productId, int quantity) {
+    public ShoppingCart updateProductInCart(int userId, int productId, int quantity) {
 
         CartItem cartItem = shoppingCartRepository.findByUserIdAndProductId(userId, productId);
 
@@ -70,6 +70,14 @@ public class ShoppingCartService
             cartItem.setQuantity(quantity);
             shoppingCartRepository.save(cartItem);
         }
+
+        return getByUserId(userId);
+    }
+
+    // Using pre-built repository method to delete by user id and returns empty list as body
+    public ShoppingCart deleteProductsFromCart(int userId) {
+
+        shoppingCartRepository.deleteByUserId(userId);
 
         return getByUserId(userId);
     }
