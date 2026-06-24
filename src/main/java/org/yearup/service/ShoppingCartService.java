@@ -17,14 +17,12 @@ public class ShoppingCartService
     private final ShoppingCartRepository shoppingCartRepository;
     private final ProductService productService;
 
-    public ShoppingCartService(ShoppingCartRepository shoppingCartRepository, ProductService productService)
-    {
+    public ShoppingCartService(ShoppingCartRepository shoppingCartRepository, ProductService productService) {
         this.shoppingCartRepository = shoppingCartRepository;
         this.productService = productService;
     }
 
-    public ShoppingCart getByUserId(int userId)
-    {
+    public ShoppingCart getByUserId(int userId) {
         // load the user's cart rows, look up each product, and build the ShoppingCart
         List<CartItem> userCartItems = shoppingCartRepository.findByUserId(userId);
         ShoppingCart shoppingCart = new ShoppingCart();
@@ -77,7 +75,8 @@ public class ShoppingCartService
     // Using pre-built repository method to delete by user id and returns empty list as body
     public ShoppingCart deleteProductsFromCart(int userId) {
 
-        shoppingCartRepository.deleteByUserId(userId);
+        List<CartItem> userCartItems = shoppingCartRepository.findByUserId(userId);
+        shoppingCartRepository.deleteAll(userCartItems);
 
         return getByUserId(userId);
     }

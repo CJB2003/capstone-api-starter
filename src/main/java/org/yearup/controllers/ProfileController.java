@@ -1,0 +1,54 @@
+package org.yearup.controllers;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import org.yearup.models.Profile;
+import org.yearup.models.User;
+import org.yearup.service.ProfileService;
+import org.yearup.service.UserService;
+
+import java.security.Principal;
+
+@RestController
+@RequestMapping("/profile")
+@CrossOrigin
+public class ProfileController {
+
+    private final ProfileService profileService;
+    private final UserService userService;
+
+    public ProfileController(ProfileService profileService, UserService userService) {
+        this.profileService = profileService;
+        this.userService = userService;
+    }
+
+    @GetMapping
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Profile> getProfile(Principal principal) {
+
+        int userId = getUserId(principal);
+
+        return profileService.getProfileById(userId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Profile> updateProfile(Principal principal, @RequestBody Profile profile) {
+
+        int userId = getUserId(principal);
+
+        return ResponseEntity.ok(profileService.updateProfile(userId, profile));
+    }
+
+    // Another getUserId helper method
+    private int getUserId(Principal principal) {
+
+        String username = principal.getName();
+        User user = userService.getByUserName(username);
+
+        return user.getId();
+    }
+}

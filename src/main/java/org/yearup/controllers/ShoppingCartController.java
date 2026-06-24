@@ -70,6 +70,7 @@ public class ShoppingCartController {
     @DeleteMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ShoppingCart> deleteCart(Principal principal) {
+
         int userId = getUserId(principal);
 
         // Returning 200 ok instead of 204 since specified
@@ -81,8 +82,7 @@ public class ShoppingCartController {
     {
         String userName = principal.getName();
         User user = userService.getByUserName(userName);
-        int userId = user.getId();
 
-        return userId;
+        return user.getId();
     }
 }

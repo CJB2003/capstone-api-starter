@@ -46,8 +46,7 @@ public class ProductService
         return productRepository.save(product);
     }
 
-    public Product update(int productId, Product product)
-    {
+    public Product update(int productId, Product product) {
         Product existing = productRepository.findById(productId).orElseThrow();
         existing.setName(product.getName());
         existing.setPrice(product.getPrice());
