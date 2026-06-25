@@ -29,7 +29,7 @@ tags:
     description: Manage the authenticated user's shopping cart
   - name: Profile
     description: Manage the authenticated user's profile
-  - name: Orders
+  - name: Order
     description: Checkout and order management
 
 components:
@@ -834,7 +834,7 @@ paths:
 
   /orders:
     post:
-      tags: [Orders]
+      tags: [Order]
       summary: Checkout - create order from cart (@todo)
       description: Converts the current user's shopping cart into a new order. Creates a record in the orders table and one order line item per cart item, then clears the cart. No request body required. @todo - OrdersController does not yet exist and must be created from scratch.
       operationId: checkout
