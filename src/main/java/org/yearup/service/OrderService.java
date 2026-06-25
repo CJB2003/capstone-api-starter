@@ -33,7 +33,7 @@ public class OrderService {
     // Need to make a create order method
     public Order createOrder(int userId) {
 
-        // Getting shopping cart and profile by user's id. Creating the order.
+        // Getting current shopping cart and user profile by user's id. Creating the order and saving it.
         ShoppingCart shoppingCart = shoppingCartService.getByUserId(userId);
         Profile userProfile = profileService.getProfileById(userId)
                 .orElseThrow(() -> new RuntimeException("No profile found by user id: " + userId));
