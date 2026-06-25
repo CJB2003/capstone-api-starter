@@ -1,9 +1,7 @@
 package org.yearup.service;
 
 import org.springframework.stereotype.Service;
-import org.yearup.models.Order;
-import org.yearup.models.Profile;
-import org.yearup.models.ShoppingCart;
+import org.yearup.models.*;
 import org.yearup.repository.OrderLineItemRepository;
 import org.yearup.repository.OrderRepository;
 
@@ -35,11 +33,12 @@ public class OrderService {
     // Need to make a create order method
     public Order createOrder(int userId) {
 
-        // Getting shopping cart and profile by user's id
+        // Getting shopping cart and profile by user's id. Creating the order.
         ShoppingCart shoppingCart = shoppingCartService.getByUserId(userId);
         Profile userProfile = profileService.getProfileById(userId)
                 .orElseThrow(() -> new RuntimeException("No profile found by user id: " + userId));
         Order order = new Order();
+
         order.setUserId(userId);
         order.setDate(LocalDateTime.now());
         order.setAddress(userProfile.getAddress());
@@ -47,6 +46,28 @@ public class OrderService {
         order.setState(userProfile.getState());
         order.setZip(userProfile.getZip());
         order.setShippingAmount(FLAT_SHIPPING_RATE);
-        return orderRepository.save(order);
+
+        Order savedOrder = orderRepository.save(order);
+
+        createOrderLineItems(savedOrder, shoppingCart);
+
+        // Clears users cart after checking out
+        shoppingCartService.deleteProductsFromCart(userId);
+
+        return savedOrder;
+    }
+
+    // Helper method that iterates over the shopping cart items
+    // and then stores them in orderLineItem in the db
+    private void createOrderLineItems(Order savedOrder, ShoppingCart shoppingCart) {
+        for(ShoppingCartItem cartItem : shoppingCart.getItems().values()) {
+            OrderLineItem orderLineItem = new OrderLineItem();
+            orderLineItem.setOrderId(savedOrder.getOrderId());
+            orderLineItem.setProductId(cartItem.getProductId());
+            orderLineItem.setSalesPrice(cartItem.getProduct().getPrice());
+            orderLineItem.setQuantity(cartItem.getQuantity());
+            orderLineItem.setDiscount(cartItem.getDiscountPercent());
+            orderLineItemRepository.save(orderLineItem);
+        }
     }
 }
