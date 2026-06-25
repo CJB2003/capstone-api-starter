@@ -29,8 +29,7 @@ public class OrderLineItem {
     public OrderLineItem() {
     }
 
-    public OrderLineItem(int orderLineItemId, int orderId, int productId, double salesPrice, int quantity, double discount) {
-        this.orderLineItemId = orderLineItemId;
+    public OrderLineItem(int orderId, int productId, double salesPrice, int quantity, double discount) {
         this.orderId = orderId;
         this.productId = productId;
         this.salesPrice = salesPrice;
