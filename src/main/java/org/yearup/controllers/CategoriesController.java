@@ -103,7 +103,7 @@ public class CategoriesController
         // delete the category by id and return status 204 No Content
         try {
             categoryService.delete(id);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.noContent().build();
 
         } catch (Exception e) {
             if (e.getMessage().equals("Category id " + id + " not found.")) {
