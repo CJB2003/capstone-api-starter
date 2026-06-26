@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import org.yearup.models.Order;
 import org.yearup.models.User;
 import org.yearup.service.OrderService;
@@ -33,6 +34,10 @@ public class OrderController {
 
         String userName = principal.getName();
         User user = userService.getByUserName(userName);
+
+        if (orderService.checkOutOrder(user.getId()) == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can not check out an empty order.");
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(orderService.checkOutOrder(user.getId()));
     }
