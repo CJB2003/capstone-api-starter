@@ -35,10 +35,12 @@ public class OrderController {
         String userName = principal.getName();
         User user = userService.getByUserName(userName);
 
-        if (orderService.checkOutOrder(user.getId()) == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can not check out an empty order.");
+        Order order = orderService.checkOutOrder(user.getId());
+
+        if (order == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(orderService.checkOutOrder(user.getId()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
 }
