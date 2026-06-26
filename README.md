@@ -40,11 +40,11 @@ Utilizes all of CRUD for product categories. Reading categories is open to any u
 | DELETE | `/categories/{id}` | Admin only |
  
 ### Products
-Product browsing and search, plus admin-only management. Product search supports the following optional query parameters: `cat` (category id), `minPrice`, `maxPrice`, and `subCategory`. These can be combined, for example `/products?cat=1&minPrice=25&maxPrice=100`.
+Product browsing and search, plus admin-only management. Product search supports the following optional query parameters: `cat` (category id), `minPrice`, `maxPrice`, `subCategory`, and `isFeatured`. These can be combined, for example `/products?cat=1&minPrice=25&maxPrice=100`.
  
 | Verb | Endpoint | Notes |
 |---|---|---|
-| GET | `/products` | Supports filtering by category, price range, and sub-category |
+| GET | `/products` | Supports filtering by category, price range, sub-category, and featured items |
 | GET | `/products/{id}` | Get a single product |
 | POST | `/products` | Admin only |
 | PUT | `/products/{id}` | Admin only |
