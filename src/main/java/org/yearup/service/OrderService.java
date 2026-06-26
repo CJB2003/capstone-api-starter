@@ -34,6 +34,11 @@ public class OrderService {
 
         // Getting current shopping cart and user profile by user's id. Creating the order and saving it.
         ShoppingCart shoppingCart = shoppingCartService.getByUserId(userId);
+
+        if (shoppingCart.getItems().isEmpty()) {
+            return null;
+        }
+
         Profile userProfile = profileService.getProfileById(userId)
                 .orElseThrow(() -> new RuntimeException("No profile found by user id: " + userId));
 
