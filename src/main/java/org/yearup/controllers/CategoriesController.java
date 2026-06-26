@@ -24,8 +24,6 @@ public class CategoriesController
     private final CategoryService categoryService;
     private final ProductService productService;
 
-    // create an Autowired constructor to inject the categoryService and productService
-    @Autowired
     public CategoriesController(CategoryService categoryService, ProductService productService) {
         this.categoryService = categoryService;
         this.productService = productService;
@@ -53,7 +51,7 @@ public class CategoriesController
 
     // the url to return all products in category 1 would look like this
     // https://localhost:8080/categories/1/products
-    @GetMapping("{categoryId}/products")
+    @GetMapping("/{categoryId}/products")
     @PreAuthorize("permitAll()")
     public ResponseEntity<List<Product>> getProductsById(@PathVariable int categoryId)
     {
@@ -79,7 +77,7 @@ public class CategoriesController
 
     // add annotation to call this method for a PUT (update) action - the url path must include the categoryId
     // add annotation to ensure that only an ADMIN can call this function
-    @PutMapping
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Category> updateCategory(@PathVariable int id, @RequestBody Category category)
     {
@@ -95,7 +93,6 @@ public class CategoriesController
             return ResponseEntity.badRequest().build();
         }
     }
-
 
     // add annotation to call this method for a DELETE action - the url path must include the categoryId
     // add annotation to ensure that only an ADMIN can call this function

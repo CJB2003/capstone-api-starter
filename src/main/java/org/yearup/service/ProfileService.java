@@ -11,8 +11,8 @@ public class ProfileService
 {
     private final ProfileRepository profileRepository;
 
-    public ProfileService(ProfileRepository profileRepository)
-    {
+    public ProfileService(ProfileRepository profileRepository) {
+
         this.profileRepository = profileRepository;
     }
 
@@ -21,13 +21,14 @@ public class ProfileService
         return profileRepository.findById(userId);
     }
 
-    public Profile create(Profile profile)
-    {
+    public Profile create(Profile profile) {
+
         return profileRepository.save(profile);
     }
 
     // UpdateProfile methods updates all existing fields with new values
     public Profile updateProfile(int userId, Profile profile) {
+
         Profile existingProfile = profileRepository.findById(userId).orElseThrow();
         existingProfile.setFirstName(profile.getFirstName());
         existingProfile.setLastName(profile.getLastName());
@@ -37,6 +38,7 @@ public class ProfileService
         existingProfile.setCity(profile.getCity());
         existingProfile.setState(profile.getState());
         existingProfile.setZip(profile.getZip());
+
         return profileRepository.save(existingProfile);
     }
 }

@@ -56,6 +56,7 @@ public class CategoryService
         if (!categoryRepository.existsById(categoryId)) {
             throw new RuntimeException("Category id " + categoryId + " not found.");
         }
+
         categoryRepository.deleteById(categoryId);
     }
 }

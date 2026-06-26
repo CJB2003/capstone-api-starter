@@ -50,6 +50,6 @@ public class ShoppingCartItem
         double subTotal = basePrice * this.quantity;
         double discountAmount = subTotal * discountPercent;
 
-        return subTotal - discountAmount;
+        return Math.round((subTotal - discountAmount) * 100.0) / 100.0;
     }
 }

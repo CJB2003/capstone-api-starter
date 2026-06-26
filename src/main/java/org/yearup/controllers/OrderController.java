@@ -34,6 +34,6 @@ public class OrderController {
         String userName = principal.getName();
         User user = userService.getByUserName(userName);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(orderService.createOrder(user.getId()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(orderService.checkOutOrder(user.getId()));
     }
 }
