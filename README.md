@@ -78,3 +78,4 @@ Converts a user's current shopping cart into a permanent order record. When an o
 |---|---|---|
 | POST | `/orders` | Creates an order from the current cart, creates one order line item per cart item, then clears the cart |
  
+Fixed and updated by Chris
